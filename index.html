@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+    <html lang="">
+
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liam's FYP</title>
+    <style>
+		body {
+            padding: 0;
+            margin: 0;
+            background-color: hsl(0, 0%, 10%);
+            color: white;
+        }
+		
+		p {
+			display: inline;
+		}
+		
+		.p5Canvas {
+  			margin: 0 auto;
+            text-align: center;
+		}
+		
+		details {
+			display: inline;
+		}
+		
+		details > summary {
+			padding: 4px;
+			
+			display: inline;
+		}
+
+		details > p {
+			padding: 4px;
+			margin: 0;
+			display: inline;
+		}
+		
+		.slider {
+			display: block;
+		}
+		
+    </style>
+    <script src="resources/js/p5.js"></script> <!-- <script src="../p5.min.js"></script> -->
+    <script type="module" src="resources/js/sketch.js"></script>
+    </head>
+
+    <body>
+        <main>
+        </main>
+		
+		<div class="slidecontainer">
+			<p id="numSinesText">Number of sines</p>
+			<input type="range" min="3" max="15" step="1" value="3" class="slider" id="numSinesSlider">
+			
+			<p id="sizeRatioText">Size ratio</p>
+			<details>
+				<summary></summary>
+				<p>The size ratio of each sub sine comapred to the last</p>
+			</details>
+			<input type="range" min="0.3" max="4" step="0.1" value="0.2" class="slider" id="sizeRatioSlider">
+			
+			<p id="rotationRatioText">Rotation ratio</p>
+			<input type="range" min="-5" max="5" step="0.5" value="0.2" class="slider" id="rotationRatioSlider">
+			
+			<p id="maxRotationText">Max rotations</p>
+			<input type="range" min="0" max="20" step="1" value="0" class="slider" id="maxRotationSlider">
+			
+			
+			
+<!--
+			<p id="numRotationsText">Number of rotations</p>
+			<input type="range"  min="0" max="5" step="0.5" value="1" class="slider" id="numRotationslider">
+-->
+			
+<!--
+			<p id="renderSpeedText">Render speed</p>
+			<input type="range"  min="1" max="50" step="0.5" value="1" class="slider" id="renderSpeedSlider">
+-->
+			
+			<p id="renderCutoffText">Render cut-off</p>
+			<input type="range" min="0" max="666" step="1" value="0" class="slider" id="renderCutoffSlider"> <!--Max value set by JS-->
+			
+<!--
+			<input type="checkbox" id="experimentalDrawingCheckbox">
+			<label for="vehicle1"> Experimental drawing</label><br>
+-->
+			
+			<input type="checkbox" id="colourCheckbox">
+			<label for="colourCheckbox">Colour</label><br>
+            
+			<button id="pauseButton">Pause</button>
+			<button id="traceModeButton">Circle mode</button>
+			<button id="clearButton">Restart</button>
+		</div>
+    </body>
+
+</html>
