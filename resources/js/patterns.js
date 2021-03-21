@@ -1,10 +1,28 @@
 import { addToSketch, clearSketch, setClearBackground, drawerArray } from "./sketch.js"
 import { SineDrawer, randomHSB } from "./drawers.js"
 import { setupSpiroCanvas, SpiroGraph } from "./spirograph.js"
-import { setupSpiroDrawer, updateSpiroDrawer, setColour } from "./spiroDrawer.js"
+import { setupSpiroDrawer, updateSpiroDrawer } from "./spiroDrawer.js"
 
 let currentPattern = 0
 let patternArray = []
+
+function randomInteger(min, max)
+{
+	let me = min + Math.floor(Math.random() * (max - min + 1))
+	return me 
+}
+
+function randomReal(min, max)
+{
+	//let me = min + (Math.random() * (max - min + 1))
+	let me = map(Math.random(), 0, 1, min, max)
+	return me 
+}
+
+function randomSign()
+{
+	return (Math.random() > 0.5 ? 1 : -1 ) 
+}
 
 export function setupPatterns()
 {
@@ -18,34 +36,198 @@ export function setupPatterns()
 		Short path, slower progression, don't clear BG, skip fewer points
 	*/
 	
-	let spiroDrawer = new Pattern("spiroDrawer");
-	let spiro;
-	spiroDrawer.setup = function()
-	{	
-		setupSpiroCanvas(1000, 1000);
-		
-		setupSpiroDrawer();
-		//spiro = new SpiroDrawer();
-		
-	}
-	spiroDrawer.render = function()
-	{	
-		//spiro.update(mouseX, mouseY, 1, 1)
-		updateSpiroDrawer();
-		setClearBackground(false);
-		
-	}
-	
-	let multiSpiro = new Pattern("multiSpiro");
+//	let spiroDrawer = new Pattern("spiroDrawer");
+//	let spiro;
+//	spiroDrawer.setup = function()
+//	{	
+//		setupSpiroCanvas(1000, 1000);
+//		
+//		setupSpiroDrawer();
+//		//spiro = new SpiroDrawer();
+//		
+//	}
+//	spiroDrawer.render = function()
+//	{	
+//		//spiro.update(mouseX, mouseY, 1, 1)
+//		updateSpiroDrawer();
+//		setClearBackground(false);
+//		
+//	}
+    
+    // initialise common variables for Spiros
     let spiros = new Array();
     let w = 1000;
     let h = 1000;
     let hcount = 5;
     let vcount = 5;
     let tcount = hcount * vcount;
+
+    let complexSpiros = new Pattern("complexSpiros");
+	
+	// this shouldn't all be dumped into patterns. Should be broken off into new class
+	let randomiseStainedGlass = function(spiro)
+	{
+		//replaces spiros[i] with spiro
+		
+		
+		spiro.intOffset = Math.floor(Math.random() * 3)
+		spiro.subSineAngleChange = randomInteger(4, 6) * randomSign() //(i+5)//Math.sqrt(i+1)//0.001618//-0.001//map(i, 0, tcount, 0.01, 0.02);
+		//spiro.initialSineAngleChange = -0.01;//map(i, 0, tcount, 0.5, 2);
+		spiro.numSines = randomInteger(4, 5)
+		spiro.renderCutoff = 0
+		spiro.initialSineScale = (w/(2*hcount))/3///( w > h ? (h/(vcount+1)*vcount/10) : (w/(hcount+1)*hcount/10));
+		spiro.colour = Math.random() < 0.5 ? color(255, 255, 255, 5) : color(0, 0, 0, 0) //(255, 0, 0, 255) //color(0, 0, 0, 3) 
+		spiro.lineThickness = 1;
+		spiro.maxRotations = 1.05//3;
+		spiro.subSineScale = randomReal(0.5, 1.1)//1/(i+1)//0.7;
+
+		spiro.setup();
+	}
+	
+	complexSpiros.setup = function()
+	{	
+		spiros = new Array();
+		w = 2000//700;
+		h = 2000//700;
+		hcount = 5//1
+		vcount = 5//1
+		tcount = hcount * vcount
+		
+		setupSpiroCanvas(w, h);
+        background('ivory');
+        
+        for (let i=0; i < tcount; i++)
+            {
+			
+				spiros[i] = new SpiroGraph();
+				randomiseStainedGlass(spiros[i]);
+				
+				//spiros[i].x = ;
+				
+				spiros[i] = new SpiroGraph();
+				spiros[i].intOffset = Math.floor(Math.random() * 3)
+				spiros[i].subSineAngleChange = randomInteger(4, 6) * randomSign() //(i+5)//Math.sqrt(i+1)//0.001618//-0.001//map(i, 0, tcount, 0.01, 0.02);
+				//spiros[i].initialSineAngleChange = -0.01;//map(i, 0, tcount, 0.5, 2);
+				spiros[i].numSines = randomInteger(4, 5)
+				spiros[i].renderCutoff = 0
+				spiros[i].initialSineScale = (w/(2*hcount))/(3.5)///( w > h ? (h/(vcount+1)*vcount/10) : (w/(hcount+1)*hcount/10));
+				//spiros[i].colour = (255, 0, 0, 3) //color(0, 0, 0, 3) 
+				spiros[i].lineThickness = 1;
+				spiros[i].maxRotations = 1.05//3;
+				spiros[i].subSineScale = randomReal(0.5, 1.1)//1/(i+1)//0.7;
+				
+				spiros[i].setup();
+            }
+
+	}
+	complexSpiros.render = function()
+	{	
+    
+        //let len = hco
+		
+		//clear(); 
+		
+		if (mouseIsPressed)
+		{
+			// find nearest?
+			// maybe we should give each spiro an X and Y
+			// when mouse is pressed cycle through array and see if mouse x and y is within N pixels of spiro centre
+			// if yes spiro is selected
+			
+			/*
+			just realised that if we visually highlight one we can't then unhilight it with changing the drawing piepline completely, thanks to persistence
+			solution:
+			present lets say 5 of these guys
+			text at top says select your favourite
+			as soon as you do a highlight appears and we fade to clear (drawing semi opaque white on top until opacity = 100 - may have to pause psiros and change blend mode for this to work???
+				or possibly just chnage blend mode right before we draw semi opaque, spiros set their own blend mode)
+				alternative selection visualisation:
+					fade in rectangle left and right of selection so unselected options fade away
+					then selection begins fading away after
+			New page loads and it asks you to select your favourite again.
+			On third page it presents the offspring
+			*/
+		}
+  
+		
+		if (keyIsDown((255, 0, 0, 255)))//if (timer <= 0)
+		{
+			// clear screen
+			blendMode(BLEND)
+			background("white")
+			
+			let parent1 = spiros[0];
+			let parent2 = spiros[1];
+			
+			let mutant = new SpiroGraph();
+			let mutationProbability = 0.3
+			
+			let chooseParent = function() {
+				// optional percentage argument?
+				//return (Math.random() > 0.5 ? parent1 : parent2)
+				if (Math.random() < mutationProbability)
+				{
+					randomiseStainedGlass(mutant);
+					return mutant1;
+				}			
+				else
+					return (Math.random() < 0.5 ? parent1 : parent2)
+			}
+			
+			// inherit from two parents (or inherit random mutation!)
+			for (let i=2; i < tcount; i++)
+            {
+                // cloned features
+				spiros[i] = new SpiroGraph();
+				spiros[i].intOffset = chooseParent().intOffset
+				spiros[i].subSineAngleChange = chooseParent().subSineAngleChange
+				spiros[i].numSines = chooseParent().numSines
+				spiros[i].initialSineScale = chooseParent().initialSineScale
+				spiros[i].maxRotations = chooseParent().maxRotations
+				spiros[i].subSineScale = chooseParent().subSineScale
+				spiros[i].color = chooseParent().colour;
+				
+				// features that should be same for all
+				spiros[i].lineThickness = 1;
+				spiros[i].renderCutoff = 2
+				//spiros[i].colour = spiros[0].colour	
+				
+				spiros[i].setup();
+            }
+			
+		}
+		
+		
+		
+		
+		let i=0;	
+		for (let y=0; y < vcount; y++)
+            {
+			for (let x=0; x < hcount; x++)
+				{
+					spiros[i].update(((w/(hcount+1))*(x+1)), ((h/(vcount+1))*(y+1)), 1, 1)//map(i, 0, vcount, 0.5, 2))//map(i, 0, (hcount*vcount), 0.01, 0.02));//spiros[h*w] = new SpiroGraph();
+					
+					fill(0);
+					textSize(16);
+					//text(spiros[i].subSineScale, ((w/(hcount+1))*(x+1)), ((h/(vcount+1))*(y+1)) + 300);
+					
+					i++;
+				}
+		}
+
+        setClearBackground(false);
+	}
+	
+	let multiSpiro = new Pattern("multiSpiro");
 	multiSpiro.setup = function()
 	{	
-		setupSpiroCanvas(w, h);
+		w = 1000;
+    	h = 1000;
+    	hcount = 5;
+    	vcount = 5;
+    	tcount = hcount * vcount;
+        
+        setupSpiroCanvas(w, h);
         
         for (let i=0; i < tcount; i++)
             {
@@ -221,53 +403,7 @@ export function setupPatterns()
         setClearBackground(false);
 	}
 	
-	let complexSpiros = new Pattern("complexSpiros");
-	complexSpiros.setup = function()
-	{	
-		spiros = new Array();
-		w = 3000;
-		h = 1000;
-		hcount = 5;
-		vcount = 1;
-		tcount = hcount * vcount
-		
-		setupSpiroCanvas(w, h);
-        
-        for (let i=0; i < tcount; i++)
-            {
-                spiros[i] = new SpiroGraph();
-				spiros[i].subSineAngleChange = (i+5)//Math.sqrt(i+1)//0.001618//-0.001//map(i, 0, tcount, 0.01, 0.02);
-				//spiros[i].initialSineAngleChange = -0.01;//map(i, 0, tcount, 0.5, 2);
-				spiros[i].numSines = 5
-				spiros[i].renderCutoff = 0
-				spiros[i].initialSineScale = (w/(2*hcount))/3///( w > h ? (h/(vcount+1)*vcount/10) : (w/(hcount+1)*hcount/10));
-				//spiros[i].colour = ((i%2) ? color(0, 0, 255, 1) : color(255, 0, 0, 1) ) 
-				spiros[i].lineThickness = 1;
-				spiros[i].maxRotations = 3;
-				spiros[i].subSineScale = 0.7//1/(i+1)//0.7;
-				
-				spiros[i].setup();
-            }
-
-	}
-	complexSpiros.render = function()
-	{	
-    
-        //let len = hco
-		let i=0;
-		
-		
-		for (let y=0; y < vcount; y++)
-            {
-			for (let x=0; x < hcount; x++)
-				{
-					spiros[i].update(((w/(hcount+1))*(x+1)), ((h/(vcount+1))*(y+1)), 1, 1)//map(i, 0, vcount, 0.5, 2))//map(i, 0, (hcount*vcount), 0.01, 0.02));//spiros[h*w] = new SpiroGraph();
-					i++;
-				}
-		}
-
-        setClearBackground(false);
-	}
+	
 	
 //    let autoSpiro = new Pattern("autoSpiro");
 //	autoSpiro.setup = function()

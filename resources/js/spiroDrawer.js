@@ -10,7 +10,7 @@ let frameCount = 0
 
 let lastSpiroX = -9999;
 let lastSpiroY = -9999;
-let minimumDistanceBetweenSpiros = 50;
+let minimumDistanceBetweenSpiros = 75;
 
 let colour;
 let colourPicker;
@@ -26,38 +26,47 @@ export function setupSpiroDrawer() {
   	colourPicker.position(0, height + 5);
 }
 
-export function setColour(col)
-{
-	//colour = col; // colourPicker.color()
-}
-
 export function updateSpiroDrawer()
 {
     if (mouseIsPressed)
 	{
 		
 	colour = colourPicker.color();
-	colour.levels[3] = 4
+		
+		// RGB	
+	colour.levels[0] = colour.levels[0] * Math.random(0.2, 5)
+	colour.levels[1] = colour.levels[1] * Math.random(0.2, 5)
+	colour.levels[2] = colour.levels[2] * Math.random(0.2, 5)
+		
+		// alpha
 	colour._array[3] = 0.01
 		
 		
-	//isPaused = false;
-		mousePressedLastFrame = true; // for next frame
-
 		
-		if ((abs(mouseX - lastSpiroX) + abs(mouseY - lastSpiroY) > minimumDistanceBetweenSpiros))//(frameCount == 0)
+
+		console.log(Math.sqrt(Math.pow(abs(lastSpiroX - mouseX), 2) + Math.pow(abs(lastSpiroY - mouseY), 2 )))
+		
+		
+		
+		
+		if ( (Math.sqrt(Math.pow(abs(lastSpiroX - mouseX), 2) + Math.pow(abs(lastSpiroY - mouseY), 2 )))  > minimumDistanceBetweenSpiros)//(abs(mouseX - lastSpiroX) + abs(mouseY - lastSpiroY) > minimumDistanceBetweenSpiros)//(frameCount == 0)
 		{
 			frameCount = makeNewSpiros(mouseX, mouseY, frameCount);
 			if (vertSymmetry)
 				{
 					frameCount = makeNewSpiros((width - mouseX), mouseY, frameCount);
 				}
+			
+			lastSpiroX = mouseX;
+		lastSpiroY = mouseY;
 
 		}
 
 			//drawSpiro(mouseX, mouseY, drawingScale, drawingSpeed)
 		
 		frameCount -= 1;
+		
+		mousePressedLastFrame = true; // for next frame
 
 	}
 	else
@@ -117,9 +126,6 @@ function makeNewSpiros(x, y, frameCount)
 	spiro.setup();
 
 	spiros.push(spiro);
-
-	lastSpiroX = x;
-	lastSpiroY = y;
 
 	frameCount = actionFrame;
 	

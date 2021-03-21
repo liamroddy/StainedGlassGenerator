@@ -21,7 +21,7 @@ window.setup = function ()
 {
 	background(5);
 	createCanvas(canvasW, canvasH);
-	frameRate(120);
+	frameRate(60);
 
 	ui = new UI();
 	
@@ -33,11 +33,11 @@ window.setup = function ()
 window.draw = function () {
 	checkKeys();
 
-	if (clearBackground)
-	{
-		background(5);
-	}
-	
+//	if (clearBackground)
+//	{
+//		background('white');
+//	}
+//	
 	updatePattern();
 
 	for (var i = 0; i < drawerArray.length; i++) {
