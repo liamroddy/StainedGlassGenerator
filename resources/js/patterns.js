@@ -150,7 +150,7 @@ export function setupPatterns()
 		}
   
 		
-		if (keyIsDown((255, 0, 0, 255)))//if (timer <= 0)
+		if (keyIsDown(ENTER))//if (timer <= 0)
 		{
 			// clear screen
 			blendMode(BLEND)
@@ -168,7 +168,7 @@ export function setupPatterns()
 				if (Math.random() < mutationProbability)
 				{
 					randomiseStainedGlass(mutant);
-					return mutant1;
+					return mutant;
 				}			
 				else
 					return (Math.random() < 0.5 ? parent1 : parent2)
