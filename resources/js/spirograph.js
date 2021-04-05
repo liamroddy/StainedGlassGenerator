@@ -2,6 +2,7 @@ import { randomHSB, LineDrawer, DoubleLineDrawer } from "./drawers.js"
 
 let spiros = new Array();
 let preProcPixels = null//pixelState;
+let timer = 0;
 
 export function setupSpiroCanvas(w, h) {
     smooth();
@@ -13,7 +14,8 @@ export function setupSpiroCanvas(w, h) {
 export class SpiroGraph {
 	constructor() {
         // object variables
-		this.intOffset = Math.floor(Math.random() * 3) // colour offset determines if red, green or blue gets drawn first
+        this.colourOffset = Math.floor(Math.random() * 3) // determines if red, green or blue gets drawn first
+        this.blendModeOffset  = Math.floor(Math.random() * 3) // determines what order the three blend modes are used in
 		
         this.numSines = 10; // how many of these things can we do at once?
         this.sines; // an array to hold all the current angles
@@ -38,10 +40,12 @@ export class SpiroGraph {
 		
 		this.angle = 0;
 		
-		this.colour = color(255, 255, 255, 3);
+		this.colour = color(0, 0, 0, 3);
         
         // colour or B&W
-        this.colourMode = true   
+        this.colourMode = true
+        
+        this.tightness = -2
     }
 	
 	setup()
@@ -59,11 +63,13 @@ export class SpiroGraph {
 			
 					this.sineLines[i].line.colour = this.colour
 			
-                    this.sineLines[i].line.skipAmount = 4;
+                    this.sineLines[i].line.skipAmount = 8;
 
                 this.sineLines[i].line.lineThickness = this.lineThickness; 		
-                this.sineLines[i].line.maxLength = 50;	
+                this.sineLines[i].line.maxLength = 100;	
         }
+
+        curveTightness( this.tightness )
 	}
     
     update(x, y, scale, drawingSpeed)
@@ -138,9 +144,9 @@ export class SpiroGraph {
 
         let overallDrawingScale = scale;
 		
-		
+		let rendersPerFrame = 1
 
-        for (var r=0; r < drawingSpeed; r++)
+        for (var r=0; r < rendersPerFrame; r++)
             {
                 if (!this.isPaused && ( (this.sines[1] < (2 * Math.PI * this.maxRotations) ) || this.maxRotations == 0 || this.traceMode == false ) )
                 {
@@ -155,35 +161,73 @@ export class SpiroGraph {
 						// THIS MAKES NO SENSE!!
                         if (this.colourMode)
                         {
-                            let stainedGlassAlpha = 4; // set high for DIFFERENCE, 4+
+                            let stainedGlassAlpha = 2; // set high for DIFFERENCE, 4+
+                            let val = 255
 						
-                            if ((this.intOffset + i) % 3 == 0)
+                            if ((this.colourOffset + i) % 3 == 0)
+                                {
+                                    this.sineLines[i].line.fillColour = color(val, 0, 0, stainedGlassAlpha)
+                                }
+                            else if ((this.colourOffset + i) % 3 == 1)
+                                {
+                                    this.sineLines[i].line.fillColour = color(0, val, 0, stainedGlassAlpha)
+                                }
+                            else if ((this.colourOffset + i) % 3 == 2)
+                                {
+                                    this.sineLines[i].line.fillColour = color(0, 0, val, stainedGlassAlpha)
+                                }
+
+                            
+                            if ((this.blendModeOffset + i) % 3 == 0)
                                 {
                                     // how top choose blend mode 'randomly' ?
                                     blendMode( HARD_LIGHT ) // HARD_LIGHT BLEND
-                                    this.sineLines[i].line.fillColour = color(255, 0, 0, stainedGlassAlpha)
                                 }
-
-                            else if ((this.intOffset + i) % 3 == 1)
+                            else if ((this.blendModeOffset + i) % 3 == 1)
                                 {
                                     blendMode( LIGHTEST ) // HARD_LIGHT BLEND
-                                    this.sineLines[i].line.fillColour = color(0, 255, 0, stainedGlassAlpha)
                                 }
-
-                            else if ((this.intOffset + i) % 3 == 2)
+                            else if ((this.blendModeOffset + i) % 3 == 2)
                                 {
                                     blendMode( ADD ) // HARD_LIGHT BLEND
-                                    this.sineLines[i].line.fillColour = color(0, 0, 255, stainedGlassAlpha)
                                 }
 
-                            blendMode( DIFFERENCE ) // EXCLUSION DIFFERENCE HARD_LIGHT BLEND ADD
+                                //blendMode( HARD_LIGHT ) // REMOVE //SUBTRACT //blendMode( DIFFERENCE ) // EXCLUSION DIFFERENCE HARD_LIGHT BLEND ADD
                             // MULTIPLY can kinda produce coolish stuff too, but trends dark and should be combined with other modes
                         }
                         else
                         {
-                            this.sineLines[i].line.fillColour = color(0, 0, 0, 2) //4 // Black with low alpha
-                            blendMode( BLEND )
+                           let a = 1
+                           this.sineLines[i].line.fillColour = color(0, 0, 0, a) //4 // Black with low alpha
+                           blendMode( BLEND ) // REMOVE //SUBTRACT 
+                           
+                            // if (i%2 == 0)
+                            //     blendMode( MULTIPLY ) // REMOVE //SUBTRACT 
+                            // else
+                            //     blendMode( SCREEN ) // REMOVE //SUBTRACT 
+                            
                         }
+
+                        /*
+                            
+                        BLEND: It blends the pixels using linear interpolation of the colors. It is the default blending mode.
+                        ADD: It produces the new color by adding the colors of both the pixels.
+                        DARKEST: It uses only the darker color of the two pixels.
+                        LIGHTEST: It uses only the lighter color of the two pixels.
+                        DIFFERENCE: It subtracts colors from the underlying image.
+                        EXCLUSION: It has a similar effect to the “difference” property with less intensity.
+                        MULTIPLY: It multiplies both the colors resulting in a darker image.
+                        SCREEN: It has the opposite effect to the “multiply” effect and uses inverse values of the colors.
+                        REPLACE: It entirely replaces the pixels of the first with the pixels of the other while ignoring the alpha values.
+                        REMOVE: It removes the pixels from the second color using its alpha strength.
+                        OVERLAY: It is a mix of the “multiply” and “screen” modes. It multiplies the light values and screens the dark values. It works only in the 2D renderer.
+                        HARD_LIGHT: It applies the “screen” effect when the gray value is above 50% and “multiply” when it is lower. It works only in the 2D renderer.
+                        SOFT_LIGHT: It is a mix of “darkest” and “lightest”. It works like the “overlay” mode with less intensity. It works only in the 2D renderer.
+                        DODGE: It lightens the light tones and increases the contrast, while ignoring the dark tones. It works only in the 2D renderer.
+                        BURN: It lightens the dark tones and increases the contrast, while ignoring the light tones. It works only in the 2D renderer.
+                        SUBTRACT: It applies the final color based on the remainder of the two pixels. It works only in the WEBGL renderer.
+
+                            */
 						
 							
 						
@@ -193,8 +237,12 @@ export class SpiroGraph {
                         {
                             if (i >= this.renderCutoff)
                             {
-								//this.sines[i].fillColour = color(255, 0, 0, 255)
-								this.sineLines[i].addPoint(sineX, sineY);	
+                                
+                                //this.sines[i].fillColour = color(255, 0, 0, 255)
+                                for (var rr=0; rr < 10; rr++)
+                                {
+                                    this.sineLines[i].addPoint(sineX, sineY);	
+                                }
                                 // this guy gets hit no bother the moment we click, but drawing starts ~1sec later. What gives?
                                 // not a transparency build up issue
                                 // something to do with sineLines? (ie LineDrawer)
@@ -263,57 +311,48 @@ export class SpiroGraph {
         
         
         //
+        
+    }
+}
 
-        
-       // loadPixels();
-        //so now pixels are B&W image
-        
-        // we've drawn in in B&W, so now save that state in preProc before modification
-        //preProcPixels = new Uint8ClampedArray(pixels)//pixels;
-        
-		//console.log(pixels[0])
-		//pixels[0] = 0; // this shouldn't be changed for next drawing round, but it is
-		
-       
-        /// MODIFY!!!!!
-        let d = pixelDensity();
-        let imageSize = 4 * (width * d) * (height * d);
-        for (let i = 0; i < imageSize; i += 4) {
-            // based on level of R (or G or B, since it's B&W it doesn't matter)
-            // based on this cast as HSB between
-            //let h = RGBtoHSV(pixels[i + 0], pixels[i + 1], pixels[i + 2]);
-			
-			
-			/*
-            let inputR = ((pixels[i])/255)
-            // for white we need saturation at 0,to avoid black we need to keep value above 0
-            let rgb = HSVtoRGB(inputR, 1-inputR, (inputR > 0.4 ? inputR : 0.4 ));  // HSVtoRGB(1, 0, 1);
-            pixels[i + 0] = rgb.r
-            pixels[i + 1] = rgb.g
-            pixels[i + 2] = rgb.b
-			
-			NthTimer++;
-			
-			if (NthTimer > 5473)
-				{
+// dislike.onclick = function()
+// {
 
-					console.log("OUTPUT\t" + rgb.r + "\t " + rgb.g + "\t" + rgb.b)
-//                    if (Math.max(pixels[i], pixels[i+1], pixels[i+2]) > 255 ||  Math.min(pixels[i], pixels[i+1], pixels[i+2]) < 0)
-//                        console.log("INPUT" + pixels[i] + "\t " + pixels[i+1] + "\t" + pixels[i+2])
-//
-//                    if (Math.max(rgb.r, rgb.g, rgb.b) > 255 ||  Math.min(rgb.r, rgb.g, rgb.b) < 0)
-//                        console.log("OUTPUT" + rgb.r + "\t " + rgb.g + "\t" + rgb.b)
-                    //console.log(rgb)
-					NthTimer =0
-				}
-           */
-        }
-        /// END MODIFY!
-		
-        
-		//console.log("POST:\t" + pixels[0] + "\t" + pixels[1] + "\t" + pixels[2]);
-		
-        //updatePixels();
+// }
+
+// like.onclick = function()
+// {
+    
+// }
+
+/*
+addColor.onclick = function()
+{
+
+                loadPixels();
+
+                let d = pixelDensity();
+                let imageSize = 4 * (width * d) * (height * d);
+                for (let i = 0; i < imageSize; i += 4) {                     
+                        let inputR = ((pixels[i+2])/255)
+                    
+                        if (pixels[3] < 254)
+                        {
+                            console.log("inputR: " + inputR + "\tpixels: " + pixels[i] + ", " + pixels[i+1] + ", " + pixels[i+2])
+                        }
+                        
+                        let rgb = HSVtoRGB(0.3*inputR, 0.9*(1-inputR), 1)//map(inputR, 255, 0, 255, -20))// (inputR > 0.4 ? inputR : 0.4 ));  // HSVtoRGB(1, 0, 1);
+                        
+                        pixels[i + 0] = rgb.r
+                        pixels[i + 1] = rgb.g
+                        pixels[i + 2] = rgb.b
+                        pixels[i + 3] = 255
+                    }
+
+            updatePixels();
+
+}
+*/
 		
 		// WHY THE FUCK DOES THIS SPEED UP RENDERING!!!!???????????!!!!!!!!!!!
 //		loadPixels();
@@ -364,33 +403,29 @@ export class SpiroGraph {
 //	//pixelState = pixels;
 //	updatePixels();
 		
-		
-    }
-    
-}
 
 // SIMPLIFY:
-        function HSVtoRGB(h, s, v) {
-            var r, g, b, i, f, p, q, t;
-            if (arguments.length === 1) {
-                s = h.s, v = h.v, h = h.h;
-            }
-            i = Math.floor(h * 6);
-            f = h * 6 - i;
-            p = v * (1 - s);
-            q = v * (1 - f * s);
-            t = v * (1 - (1 - f) * s);
-            switch (i % 6) {
-                case 0: r = v, g = t, b = p; break;
-                case 1: r = q, g = v, b = p; break;
-                case 2: r = p, g = v, b = t; break;
-                case 3: r = p, g = q, b = v; break;
-                case 4: r = t, g = p, b = v; break;
-                case 5: r = v, g = p, b = q; break;
-            }
-            return {
-                r: Math.round(r * 255),
-                g: Math.round(g * 255),
-                b: Math.round(b * 255)
-            };
-        }
+function HSVtoRGB(h, s, v) {
+    var r, g, b, i, f, p, q, t;
+    if (arguments.length === 1) {
+        s = h.s, v = h.v, h = h.h;
+    }
+    i = Math.floor(h * 6);
+    f = h * 6 - i;
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+    return {
+        r: Math.round(r * 255),
+        g: Math.round(g * 255),
+        b: Math.round(b * 255)
+    };
+}

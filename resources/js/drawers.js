@@ -149,18 +149,18 @@ class Line
 		
 		this.strokeCap = ROUND;
 
-		this.circleTrail = [];
+		this.pointPath = [];
 	}
 
 	addPoint(xx, yy)
 	{
-		let circlePosition = createVector(xx, yy);
-		this.circleTrail.push(circlePosition);
+		let pointPosition = createVector(xx, yy);
+		this.pointPath.push(pointPosition);
 	}
 
 
 	update() {
-		var trailLength = this.circleTrail.length - 1;
+		var trailLength = this.pointPath.length - 1;
 
 		stroke(this.colour, 1);//255*i/trailLength); // fade not working in js :/
 		strokeWeight(this.lineThickness);
@@ -171,25 +171,23 @@ class Line
             fill(this.fillColour)
         
         beginShape();
-        
-        
-        
-        curveVertex(this.circleTrail[trailLength].x, this.circleTrail[trailLength].y);
+      
+        curveVertex(this.pointPath[trailLength].x, this.pointPath[trailLength].y);
 
 		for (var i = 0;  i <= trailLength; i+=this.skipAmount)//(var i = trailLength-this.skipAmount; i >0; i-=this.skipAmount)
 		{		  
-			let currentTrail = this.circleTrail[i].copy();
+			let currentTrail = this.pointPath[i].copy();
 
             curveVertex(currentTrail.x, currentTrail.y);
 		}
 		
-		//curveVertex(this.circleTrail[0].x, this.circleTrail[0].y);
+		//curveVertex(this.pointPath[0].x, this.pointPath[0].y);
 		
 		endShape();
 
 		if (trailLength >= this.maxLength)
 		{
-			this.circleTrail.shift();
+			this.pointPath.shift();
 		}
 	}
 }

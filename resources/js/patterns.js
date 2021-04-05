@@ -56,10 +56,10 @@ export function setupPatterns()
     
     // initialise common variables for Spiros
     let spiros = new Array();
-    let w = 1000;
-    let h = 1000;
-    let hcount = 5;
-    let vcount = 5;
+    let w = 700;
+    let h = 700;
+    let hcount = 1;
+    let vcount = 1;
     let tcount = hcount * vcount;
 
     let complexSpiros = new Pattern("complexSpiros");
@@ -72,7 +72,7 @@ export function setupPatterns()
 		
 		spiro.intOffset = Math.floor(Math.random() * 3)
 		spiro.subSineAngleChange = randomInteger(4, 6) * randomSign() //(i+5)//Math.sqrt(i+1)//0.001618//-0.001//map(i, 0, tcount, 0.01, 0.02);
-		//spiro.initialSineAngleChange = -0.01;//map(i, 0, tcount, 0.5, 2);
+		//spiro.initialSineAngleChange = 0.0000005//-0.01;//map(i, 0, tcount, 0.5, 2);
 		spiro.numSines = randomInteger(4, 5)
 		spiro.renderCutoff = 0
 		spiro.initialSineScale = (w/(2*hcount))/3///( w > h ? (h/(vcount+1)*vcount/10) : (w/(hcount+1)*hcount/10));
@@ -87,10 +87,10 @@ export function setupPatterns()
 	complexSpiros.setup = function()
 	{	
 		spiros = new Array();
-		w = 2000//700;
-		h = 2000//700;
-		hcount = 5//1
-		vcount = 5//1
+		w = 700//700;
+		h = 700//700;
+		hcount = 1//1
+		vcount = 1//1
 		tcount = hcount * vcount
 		
 		setupSpiroCanvas(w, h);
@@ -99,27 +99,44 @@ export function setupPatterns()
         for (let i=0; i < tcount; i++)
             {
 			
-				spiros[i] = new SpiroGraph();
-				randomiseStainedGlass(spiros[i]);
+				//spiros[i] = new SpiroGraph();
+				//randomiseStainedGlass(spiros[i]);
 				
 				//spiros[i].x = ;
+
 				
+
 				spiros[i] = new SpiroGraph();
+				spiros[i].tightness = randomInteger(-5, 5)
 				spiros[i].intOffset = Math.floor(Math.random() * 3)
 				spiros[i].subSineAngleChange = randomInteger(4, 6) * randomSign() //(i+5)//Math.sqrt(i+1)//0.001618//-0.001//map(i, 0, tcount, 0.01, 0.02);
-				//spiros[i].initialSineAngleChange = -0.01;//map(i, 0, tcount, 0.5, 2);
+				spiros[i].initialSineAngleChange = 0.1
+				spiros[i].initialSineAngle = 0
 				spiros[i].numSines = randomInteger(4, 5)
 				spiros[i].renderCutoff = 0
 				spiros[i].initialSineScale = (w/(2*hcount))/(3.5)///( w > h ? (h/(vcount+1)*vcount/10) : (w/(hcount+1)*hcount/10));
-				//spiros[i].colour = (255, 0, 0, 3) //color(0, 0, 0, 3) 
 				spiros[i].lineThickness = 1;
-				spiros[i].maxRotations = 1.05//3;
+				spiros[i].maxRotations = 1.1//3;
 				spiros[i].subSineScale = randomReal(0.5, 1.1)//1/(i+1)//0.7;
 				
 				spiros[i].setup();
             }
 
 	}
+
+	like.onclick = function()
+	{
+		console.log("LIKED")
+		// add to likedList
+		// start new pattern
+	}
+
+	dislike.onclick = function()
+	{
+		console.log("DISLIKED")
+		// start new pattern
+	}
+
 	complexSpiros.render = function()
 	{	
     
