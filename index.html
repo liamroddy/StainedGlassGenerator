@@ -9,17 +9,28 @@
 		body {
             padding: 0;
             margin: 0;
-            background-color: hsl(0, 0%, 10%);
-            color: white;
+            background-color: ivory;
+            color: hsl(0, 0%, 30%);
+			font-family: Futura, "Century Gothic", AppleGothic, sans-serif;
+			text-align: center;
         }
 		
 		p {
 			display: inline;
 		}
 		
+		h1 {
+			font-weight: lighter;
+			z-index: 5;
+		}
+		
 		.p5Canvas {
-  			margin: 0 auto;
+  			margin: -50px 0 -50px 0; /*0 auto;*/
+			position: relative;
+			z-index: -5;
             text-align: center;
+			max-width: 100%;
+			max-height: 100vw;
 		}
 		
 		details {
@@ -41,19 +52,51 @@
 		.slider {
 			display: block;
 		}
+
+		.slidecontainer, main
+		{
+			text-align: center;
+			margin: 0 auto;
+		}
+
+		/* BUTTONS */
+		#dislike, #like {
+			background: none;
+			border: none;
+			padding: 0.5em;
+			font: inherit;
+			cursor: pointer;
+			outline: inherit;
+
+			font-size: 5em;
+		}
+
+		#like {
+			color: #8bc600;
+		}
+
+		#dislike {
+			color: #d3455b;
+		}
+
+		
+
 		
     </style>
     <script src="resources/js/p5.js"></script> <!-- <script src="../p5.min.js"></script> -->
-    <script type="module" src="resources/js/sketch.js"></script>
+	<script type="module" src="resources/js/sketch.js"></script>
+	<script src="https://kit.fontawesome.com/42465ee0f4.js" crossorigin="anonymous"></script>
     </head>
 
     <body>
-        <main>
+		<h1>Stained Glass Maker</h1>
+		
+		<main>
         </main>
 		
 		<div class="slidecontainer">
-			<button id="dislike">DISLIKE</button>
-			<button id="like">LIKE</button>
+			<button id="dislike"><i class="fas fa-ban"></i></button>
+			<button id="like"><i class="fas fa-heart"></i></button>
 			
 			<!-- <button id="addColor">Add colour!</button>
 

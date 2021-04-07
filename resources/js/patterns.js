@@ -87,8 +87,8 @@ export function setupPatterns()
 	complexSpiros.setup = function()
 	{	
 		spiros = new Array();
-		w = 700//700;
-		h = 700//700;
+		w = 600//700;
+		h = 600//700;
 		hcount = 1//1
 		vcount = 1//1
 		tcount = hcount * vcount
@@ -124,18 +124,144 @@ export function setupPatterns()
 
 	}
 
+
+
+
+
+	// GENETIC ALGO START
+
+	let N = 6
+	let likedList = new Array()
+	let generationList = generatePatterns(null)
+	let currentChild = 0
+
 	like.onclick = function()
 	{
-		console.log("LIKED")
-		// add to likedList
-		// start new pattern
+		likedList.push( generationList[currentChild] )
+		gotoNextChild()
 	}
 
 	dislike.onclick = function()
 	{
-		console.log("DISLIKED")
-		// start new pattern
+		gotoNextChild()
 	}
+
+	function gotoNextChild() {
+		currentChild++
+
+		if (currentChild > N)
+		{
+			currentChild
+			generationList = generatePatterns()	
+		}
+
+		displayCurrentChild()
+	}
+
+	function generatePatterns() {
+		let parentList = new Array()
+		let childList = new Array()
+		
+		let randomParentList = new Array()
+
+		for (let i=0; i < (N - likedList.length); i++)
+		{
+			randomParentList[i] = new SpiroGraph();
+			//randomiseStainedGlass() // needed here?
+		}
+
+		parentList =  likedList.concat(randomParentList)
+
+		// generate children
+		breedChildren(parentList)
+
+		return childList
+	}
+
+	function displayCurrentChild() {
+		setupSpiroCanvas(w, h);
+
+		// clear screen
+		blendMode(BLEND)
+		background("white")
+
+		generationList[currentChild].setup();
+	}
+
+	//let chooseParent = function() {}
+
+	function breedChildren(parentList) {
+		let childList = new Array()
+			
+		for (let n=0; n < N; n++)
+		{
+			let choobaDoo = () =>  {}
+			
+			let mutant = new SpiroGraph(); // properly random by default?????
+			let mutationProbability = 0.3
+
+			if (parentList == null) // first call this'll be true
+			{
+				choobaDoo = () =>  {
+					return mutant;
+				}
+			}
+			else
+			{
+				let parent1 = parentList[n]; // nope. how do?
+				let parent2
+				if (n == N-1)
+					parent2 = parentList[0]; // if at end of list loop back around
+				else
+					parent2 = parentList[n+1];
+				
+				choobaDoo = () =>  {
+					// optional percentage argument?
+					//return (Math.random() > 0.5 ? parent1 : parent2)
+					if (Math.random() < mutationProbability)
+					{
+						//randomiseStainedGlass(mutant); // not defined yet for this scope (again, is it needed? should they not randomise themselves on creation?)
+						return mutant;
+					}			
+
+					return (Math.random() < 0.5 ? parent1 : parent2)
+				}
+			}
+
+			// inherit from two parents (or inherit random mutation!)
+			// cloned features
+			let child = new SpiroGraph();
+
+			//child.intOffset = choobaDoo().intOffset // COLOUR OFFSET & BLEND MODE< NOT INT
+			child.subSineAngleChange = choobaDoo().subSineAngleChange
+			child.numSines = choobaDoo().numSines
+			child.initialSineScale = choobaDoo().initialSineScale
+			child.maxRotations = choobaDoo().maxRotations
+			child.subSineScale = choobaDoo().subSineScale
+			child.color = choobaDoo().colour;
+			
+			// features that should be same for all
+			child.lineThickness = 1;
+			child.renderCutoff = 2
+			//child.colour = childList[0].colour	
+			
+			//child.setup(); ???????
+
+			childList.push(child)
+		}
+			
+		return childList
+	}
+
+	
+
+	// GENETIC ALGO END
+	
+	
+
+
+
+
 
 	complexSpiros.render = function()
 	{	
@@ -179,7 +305,7 @@ export function setupPatterns()
 			let mutant = new SpiroGraph();
 			let mutationProbability = 0.3
 			
-			let chooseParent = function() {
+			/*let chooseParent = function() {
 				// optional percentage argument?
 				//return (Math.random() > 0.5 ? parent1 : parent2)
 				if (Math.random() < mutationProbability)
@@ -210,7 +336,8 @@ export function setupPatterns()
 				//spiros[i].colour = spiros[0].colour	
 				
 				spiros[i].setup();
-            }
+			}
+			*/
 			
 		}
 		
@@ -222,7 +349,7 @@ export function setupPatterns()
             {
 			for (let x=0; x < hcount; x++)
 				{
-					spiros[i].update(((w/(hcount+1))*(x+1)), ((h/(vcount+1))*(y+1)), 1, 1)//map(i, 0, vcount, 0.5, 2))//map(i, 0, (hcount*vcount), 0.01, 0.02));//spiros[h*w] = new SpiroGraph();
+					spiros[i].update(((w/(hcount+1))*(x+1)), ((h/(vcount+1))*(y+1)), 1.2, 1)//map(i, 0, vcount, 0.5, 2))//map(i, 0, (hcount*vcount), 0.01, 0.02));//spiros[h*w] = new SpiroGraph();
 					
 					fill(0);
 					textSize(16);
