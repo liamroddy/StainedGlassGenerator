@@ -4,128 +4,76 @@
     <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liam's FYP</title>
-    <style>
-		body {
-            padding: 0;
-            margin: 0;
-            background-color: ivory;
-            color: hsl(0, 0%, 30%);
-			font-family: Futura, "Century Gothic", AppleGothic, sans-serif;
-			text-align: center;
-        }
-		
-		p {
-			display: inline;
-		}
-		
-		h1 {
-			font-weight: lighter;
-			z-index: 5;
-		}
-		
-		.p5Canvas {
-  			margin: -50px 0 -50px 0; /*0 auto;*/
-			position: relative;
-			z-index: -5;
-            text-align: center;
-			max-width: 100%;
-			max-height: 100vw;
-		}
-		
-		details {
-			display: inline;
-		}
-		
-		details > summary {
-			padding: 4px;
-			
-			display: inline;
-		}
+    <title>Stained Glass Generator</title>
 
-		details > p {
-			padding: 4px;
-			margin: 0;
-			display: inline;
-		}
-		
-		.slider {
-			display: block;
-		}
+	<link rel="stylesheet" href="resources/css/style.css"/>
 
-		.slidecontainer, main
-		{
-			text-align: center;
-			margin: 0 auto;
-		}
+	<!-- TODO: do we need all three? -->
+	<link rel="icon" type="image/png" sizes="32x32" href="resources/favicons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="resources/favicons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="resources/favicons/favicon-16x16.png">
 
-		/* BUTTONS */
-		#dislike, #like {
-			background: none;
-			border: none;
-			padding: 0.5em;
-			font: inherit;
-			cursor: pointer;
-			outline: inherit;
-
-			font-size: 5em;
-		}
-
-		#like {
-			color: #8bc600;
-		}
-
-		#dislike {
-			color: #d3455b;
-		}
-
-		
-
-		
-    </style>
-    <script src="resources/js/p5.js"></script> <!-- <script src="../p5.min.js"></script> -->
+    <script src="resources/js/p5.min.js"></script> <!-- <script src="../p5.min.js"></script> -->
 	<script type="module" src="resources/js/sketch.js"></script>
-	<script src="https://kit.fontawesome.com/42465ee0f4.js" crossorigin="anonymous"></script>
-    </head>
+	<!-- <script src="https://kit.fontawesome.com/42465ee0f4.js" crossorigin="anonymous"></script> -->
+	<script src="resources/js/fontawesome/js/all.js"></script>
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+	<script>
+		window.onload = function() {
+			Swal.fire({
+			title: 'Stained Glass Generator',
+			html:
+				'<p>An interactive art piece.' +
+				'<br>Generates patterns inspired by the beautiful stained glass rose window of <strong>Galway Cathedral</strong>' +
+				'<br><br>Click <span class=\'fa fa-heart\'></span> if you like a pattern<br>Click <span class=\'fa fa-ban\'></span> if you don\'t' +
+				'<br>The generator will learn your preferences and generate you more patterns that you might like' +
+				'<br><br>Click the <span class=\'fa fa-arrow-to-bottom\'></span> to download a pattern.</p>' +
+				'<br> Click the  <span class=\'fa fa-question-circle\'></span> for help.' +
+				'' +
+				'',
+			confirmButtonText: 'Close'
+			})
+		};
+		
+		let helpPopup = function()
+		{
+			Swal.fire({
+			title: 'Stained Glass Generator',
+			html:
+				'<p>An interactive art piece.' +
+				'<br>Generates patterns inspired by the beautiful stained glass rose window of <strong>Galway Cathedral</strong>' +
+				'<br><br>Click <span class=\'fa fa-heart\'></span> if you like a pattern<br>Click <span class=\'fa fa-ban\'></span> if you don\'t' +
+				'<br>The generator will learn your preferences and generate you more patterns that you might like' +
+				'<br><br>Click the <span class=\'fa fa-arrow-to-bottom\'></span> to download a pattern.</p>' +
+				'<br> Click the  <span class=\'fa fa-question-circle\'></span> for help.' +
+				'' +
+				'',
+			confirmButtonText: 'Close'
+			})
+		}
+	</script>
+
+	</head>
 
     <body>
-		<h1>Stained Glass Maker</h1>
-		
+	
+		<!-- Where the P5js canavas will be rendered -->
 		<main>
         </main>
-		
-		<div class="slidecontainer">
-			<button id="dislike"><i class="fas fa-ban"></i></button>
-			<button id="like"><i class="fas fa-heart"></i></button>
-			
-			<!-- <button id="addColor">Add colour!</button>
 
-			<p id="numSinesText">Number of sines</p>
-			<input type="range" min="3" max="15" step="1" value="3" class="slider" id="numSinesSlider">
-			
-			<p id="sizeRatioText">Size ratio</p>
-			<details>
-				<summary></summary>
-				<p>The size ratio of each sub sine comapred to the last</p>
-			</details>
-			<input type="range" min="0.3" max="4" step="0.1" value="0.2" class="slider" id="sizeRatioSlider">
-			
-			<p id="rotationRatioText">Rotation ratio</p>
-			<input type="range" min="-5" max="5" step="0.5" value="0.2" class="slider" id="rotationRatioSlider">
-			
-			<p id="maxRotationText">Max rotations</p>
-			<input type="range" min="0" max="20" step="1" value="0" class="slider" id="maxRotationSlider">
-			
-			<p id="renderCutoffText">Render cut-off</p>
-			<input type="range" min="0" max="666" step="1" value="0" class="slider" id="renderCutoffSlider"> 
-			
-			<input type="checkbox" id="colourCheckbox">
-			<label for="colourCheckbox">Colour</label><br>
-            
-			<button id="pauseButton">Pause</button>
-			<button id="traceModeButton">Circle mode</button>
-			<button id="clearButton">Restart</button> -->
-		</div>
+		<footer>
+			<div class="big_button_container">
+				<button id="help" onclick="helpPopup()"><i class="fal fa-question-circle"></i></button>
+				
+				<button id="dislike"><i class="fal fa-ban"></i></button>
+				<button id="like"><i class="fal fa-heart"></i></button>
+
+				<button id="download"><i class="fal fa-arrow-to-bottom"></i></button>
+			</div>
+
+			<p>Created by Liam Roddy  |  <a target="_blank" rel="noopener noreferrer" href="https://github.com/liamroddy/LaTene">View code on Github</a></p>
+		</footer>
     </body>
 
 </html>
