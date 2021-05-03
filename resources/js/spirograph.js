@@ -5,7 +5,7 @@ export class SpiroGraph {
         // object variables
         this.colourOffset = Math.floor(Math.random() * 3) // determines if red, green or blue gets drawn first
         this.blendModeOffset  = Math.floor(Math.random() * 3) // determines what order the three blend modes are used in
-        this.tightness = randomInteger(-3, 3)
+        this.tightness = randomInteger(-3, 3) // how curvy/sharp the pattern's curves are
         this.colourOffset = Math.floor(Math.random() * 3)	
         this.blendModeOffset = Math.floor(Math.random() * 2)
         this.subSineAngleChange = randomInteger(4, 6) * randomSign() 
@@ -16,7 +16,7 @@ export class SpiroGraph {
         this.initialSineScale = (width/(2))/(3.5)
         this.lineThickness = 1;
         this.maxRotations = 1.1
-        this.subSineScale = randomReal(0.5, 1.1)
+        this.subSineScale = randomReal(0.5, 0.9)
 
         this.colour = color(0, 0, 0, 3); // line colour
         this.sines; // an array to hold all the current angles
@@ -156,8 +156,7 @@ export class SpiroGraph {
                 y = sineY;
 
                 currentSineScale = (this.initialSineScale * this.subSineScale * (1/(i)))
-                // TODO: reimplement below as alternative modes!
-                currentSineAngleChange *= this.subSineAngleChange//= i * this.subSineAngleChange// = this.initialSineAngleChange + (i * this.subSineAngleChange) 
+                currentSineAngleChange *= this.subSineAngleChange
             }
         }          
     }
