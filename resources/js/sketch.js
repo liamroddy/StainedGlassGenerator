@@ -1,10 +1,11 @@
-//import { setClearBackground } from "./sketch.js"
 import { SpiroGraph } from "./spirograph.js"
 
-let w = 700 // TODO: changeable?
-let h = 700
+let w = 1000 // TODO: changeable?
+let h = 1000
 
 let geneticSystem
+
+var keyWasPressedLastFrame = true;
 
 function setupCanvas(w, h)
 {
@@ -40,6 +41,7 @@ class GeneticSystem
 
 	likeSpiro() {
 		this.likedList.push( this.generationList[this.currentChild] )
+		this.gotoNextChild()
 	}
 		
 
@@ -154,7 +156,10 @@ window.setup = function ()
 
 window.draw = function () {
 	geneticSystem.updateSpiro()
+
+	checkKeys()
 }
+
 
 
 // UI button onClicks
@@ -162,7 +167,6 @@ window.draw = function () {
 like.onclick = function()
 {
 	geneticSystem.likeSpiro()
-	geneticSystem.gotoNextChild()
 }
 
 dislike.onclick = function()
@@ -175,3 +179,49 @@ download.onclick = function()
 	saveCanvas("Stained glass pattern")
 }
 
+
+// Keyboard input
+
+function checkKeys()
+{
+	// reimplementing support for below keyPressed() function, as using ES6 modules breaks it
+	
+	if (keyIsPressed && !keyWasPressedLastFrame)
+	{
+		keyPressed();
+	}
+	
+	// prep for next frame
+	if (keyIsPressed)
+	{
+		keyWasPressedLastFrame = true;
+	}
+	else
+	{
+		keyWasPressedLastFrame = false;
+	}
+}
+
+/// INPUT
+function keyPressed()
+{
+	var change = 0.01;
+
+	switch (key)
+	{
+		case ('l') :
+			geneticSystem.likeSpiro()
+			break;
+		case ('d') :
+			geneticSystem.gotoNextChild()
+			break;
+		case ('s') :
+			saveCanvas("Stained glass pattern")
+			break;
+		case ('h') :
+			// help pop-up
+			break;
+	}
+	
+	return false;
+}

@@ -77,7 +77,6 @@ footer {
     padding: none;
     font: inherit;
     cursor: pointer;
-    outline: inherit;
 
     font-size: 4em;
     height: 1.5em;
@@ -97,7 +96,7 @@ footer {
 #like {
     color: #8bc600;
 }
-#like:hover {
+#like:focus, #like:active, #like:hover {
     color: white;
     background-color: #8bc600;
 }
@@ -105,7 +104,7 @@ footer {
 #dislike {
     color: #d3455b;
 }
-#dislike:hover {
+#dislike:focus, #dislike:active, #dislike:hover {
     color: white;
     background-color: #d3455b;
 }
@@ -113,7 +112,7 @@ footer {
 #download {
     color: #7b8a9b;
 }
-#download:hover {
+#download:focus, #download:active, #download:hover {
     color: white;
     background-color: #7b8a9b;
 }
@@ -121,7 +120,7 @@ footer {
 #help {
     color: #7b8a9b;
 }
-#help:hover {
+#help:focus, #help:active,#help:hover {
     color: white;
     background-color: #7b8a9b;
 }

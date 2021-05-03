@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <html lang="">
+    <html lang="en">
 
     <head>
     <meta charset="utf-8">
@@ -16,7 +16,7 @@
     <script src="resources/js/p5.min.js"></script> <!-- <script src="../p5.min.js"></script> -->
 	<script type="module" src="resources/js/sketch.js"></script>
 	<!-- <script src="https://kit.fontawesome.com/42465ee0f4.js" crossorigin="anonymous"></script> -->
-	<script src="resources/js/fontawesome/js/all.js"></script>
+	<script src="resources/js/fontawesome/js/all.min.js"></script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 	<script>
@@ -59,17 +59,17 @@
     <body>
 	
 		<!-- Where the P5js canavas will be rendered -->
-		<main>
+		<main aria-label="Stained glass pattern">
         </main>
 
 		<footer>
 			<div class="big_button_container">
-				<button id="help" onclick="helpPopup()"><i class="fal fa-question-circle"></i></button>
+				<button aria-label="Help" name="Help" id="help" onclick="helpPopup()"><i class="fal fa-question-circle"></i></button>
 				
-				<button id="dislike"><i class="fal fa-ban"></i></button>
-				<button id="like"><i class="fal fa-heart"></i></button>
+				<button aria-label="Dislike pattern" name="Dislike pattern" id="dislike"><i class="fal fa-ban"></i></button>
+				<button aria-label="Like pattern" name="Like pattern" id="like"><i class="fal fa-heart"></i></button>
 
-				<button id="download"><i class="fal fa-arrow-to-bottom"></i></button>
+				<button aria-label="Download pattern" name="Download pattern" id="download"><i class="fal fa-arrow-to-bottom"></i></button>
 			</div>
 
 			<p>Created by Liam Roddy  |  <a target="_blank" rel="noopener noreferrer" href="https://github.com/liamroddy/LaTene">View code on Github</a></p>
