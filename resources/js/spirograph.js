@@ -9,9 +9,9 @@ export class SpiroGraph {
         this.colourOffset = Math.floor(Math.random() * 3)	
         this.blendModeOffset = Math.floor(Math.random() * 2)
         this.subSineAngleChange = randomInteger(4, 6) * randomSign() 
-        this.initialSineAngleChange = 0.1
+        this.initialSineAngleChange = 0.04
         this.initialSineAngle = 0
-        this.numSines = randomInteger(4, 5)
+        this.numSines = randomInteger(5, 6)
         this.renderCutoff = 0
         this.initialSineScale = (width/(2))/(3.5)
         this.lineThickness = 1;
@@ -85,7 +85,7 @@ export class SpiroGraph {
                 
                 if ((this.blendModeOffset + i) % 2 == 0)
                     {
-                        stainedGlassAlpha = 1 // mult works better lower opacity
+                        stainedGlassAlpha = 2 // mult works better lower opacity
                         blendMode( MULTIPLY ) // MULTIPLY HARD_LIGHT BLEND
                     }
                 else if ((this.blendModeOffset + i) % 2 == 1)
@@ -146,7 +146,7 @@ export class SpiroGraph {
                 
                 if (i >= this.renderCutoff)
                 {
-                    for (var rr=0; rr < 10; rr++) // TODO: make a bit clearers what's happeneing here
+                    for (var rr=0; rr < 5; rr++) // TODO: make a bit clearers what's happeneing here
                     {
                         this.sineLines[i].addPoint(sineX, sineY);	
                     }

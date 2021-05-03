@@ -33,7 +33,7 @@ export class GeneticAlgorithm
 	}
 
 	likePattern() {
-		this.likedList.push( this.generationList[this.currentChild] )
+        this.likedList.push( this.generationList[this.currentChild] )
 		this.gotoNextChild()
 	}
 		
@@ -45,7 +45,14 @@ export class GeneticAlgorithm
 
 		if (this.currentChild >= this.N)
 		{
-			this.currentChild = 0
+            this.currentChild = 0
+
+            //this.N += this.likedList.length // TODO - ha, no
+
+            while (this.likedList.length > this.N)
+            {
+                this.likedList.shift();
+            }
 			this.generationList = this.generatePatterns()	
 		}
 
