@@ -1,177 +1,34 @@
-import { SpiroGraph } from "./spirograph.js"
+import { GeneticAlgorithm } from "./geneticAlgorithm.js"
+//import { checkKeys } from "./input.js"
 
-let w = 1000 // TODO: changeable?
-let h = 1000
-
-let geneticSystem
-
-var keyWasPressedLastFrame = true;
-
-function setupCanvas(w, h)
-{
-	smooth();
-	createCanvas(w, h);
-	background('ivory');
-}
-
-class GeneticSystem
-{	
-	constructor()
-    {
-		setupCanvas(w, h);
-		
-
-		this.likedList = new Array()
-		this.generationList = this.generatePatterns(null)
-		this.currentChild = 0
-		this.N = 6
-		
-		for (let i=0; i < this.N; i++)
-		{
-			this.generationList[i] = new SpiroGraph();
-		}
-    }
-
-
-	updateSpiro()
-	{
-		
-		this.generationList[this.currentChild].update(((w/(2))), ((h/(2))), 1.2, 1)
-	}
-
-	likeSpiro() {
-		this.likedList.push( this.generationList[this.currentChild] )
-		this.gotoNextChild()
-	}
-		
-
-	gotoNextChild() {
-		
-		
-		this.currentChild++
-
-		if (this.currentChild >= this.N)
-		{
-			this.currentChild = 0
-			this.generationList = this.generatePatterns()	
-		}
-
-		this.displayCurrentChild()
-	}
-
-	generatePatterns() {
-		let parentList = new Array()
-		let childList = new Array()
-		
-		let randomParentList = new Array()
-
-		for (let i=0; i < (this.N - this.likedList.length); i++)
-		{
-			randomParentList[i] = new SpiroGraph();
-		}
-
-		parentList =  this.likedList.concat(randomParentList)
-
-		// generate children
-		childList = this.breedChildren(parentList)
-
-		return childList
-	}
-
-	displayCurrentChild() {
-		setupCanvas(w, h);
-
-		// clear screen
-		blendMode(BLEND)
-		background("ivory")
-
-		this.generationList[this.currentChild].setup();
-	}
-
-
-	breedChildren(parentList) {
-		let childList = new Array()
-			
-		for (let n=0; n < this.N; n++)
-		{
-			let chooseParent = () =>  {}
-			
-			let mutant = new SpiroGraph();
-			let mutationProbability = 0.1
-
-			let parent1 = parentList[n]; // nope. how do?
-			let parent2
-			if (n == this.N-1)
-				parent2 = parentList[0]; // if at end of list loop back around
-			else
-				parent2 = parentList[n+1];
-			
-			chooseParent = () =>  {
-				// optional percentage argument?
-				//return (Math.random() > 0.5 ? parent1 : parent2)
-				if (Math.random() < mutationProbability)
-				{
-					return mutant;
-				}			
-
-				return (Math.random() < 0.5 ? parent1 : parent2)
-			}
-
-			// inherit from two parents (or inherit random mutation!)
-			// cloned features
-			let child = new SpiroGraph();
-
-			//child.intOffset = chooseParent().intOffset // COLOUR OFFSET & BLEND MODE< NOT INT
-			child.subSineAngleChange = chooseParent().subSineAngleChange
-			child.numSines = chooseParent().numSines
-			child.initialSineScale = chooseParent().initialSineScale
-			child.maxRotations = chooseParent().maxRotations
-			child.subSineScale = chooseParent().subSineScale
-			child.color = chooseParent().colour;
-			
-			// features that should be same for all
-			// TODO: ?????????
-			child.lineThickness = 1;
-			child.renderCutoff = chooseParent().renderCutoff 
-
-			childList.push(child)
-		}
-			
-		return childList
-	}
-
-    
-}
+let geneticAlgorithm
 
 // CORE SKETCH SETUP AND LOOP
-
 window.setup = function ()
 {
-	frameRate(60);
-	
-	geneticSystem = new GeneticSystem()
-    //setClearBackground(true);
+	frameRate(60);	
+	geneticAlgorithm = new GeneticAlgorithm();
 
+	helpPopup();
 }
 
 window.draw = function () {
-	geneticSystem.updateSpiro()
+	geneticAlgorithm.updatePattern()
 
 	checkKeys()
 }
-
 
 
 // UI button onClicks
 
 like.onclick = function()
 {
-	geneticSystem.likeSpiro()
+	geneticAlgorithm.likePattern()
 }
 
 dislike.onclick = function()
 {
-	geneticSystem.gotoNextChild()
+	geneticAlgorithm.gotoNextChild()
 }
 
 download.onclick = function()
@@ -179,8 +36,28 @@ download.onclick = function()
 	saveCanvas("Stained glass pattern")
 }
 
+help.onclick =  helpPopup;
 
-// Keyboard input
+function helpPopup()
+{
+	Swal.fire({
+		title: 'Stained Glass Generator',
+		html:
+			'<p>An interactive art piece.' +
+			'<br>Generates patterns inspired by the beautiful stained glass rose window of <strong>Galway Cathedral</strong>' +
+			'<br><br>Click <span class=\'fa fa-heart\'></span> if you like a pattern<br>Click <span class=\'fa fa-ban\'></span> if you don\'t' +
+			'<br>The generator will learn your preferences and generate you more patterns that you might like' +
+			'<br><br>Click the <span class=\'fa fa-arrow-to-bottom\'></span> to download a pattern.</p>' +
+			'<br> Click the  <span class=\'fa fa-question-circle\'></span> for help.' +
+			'' +
+			'',
+		confirmButtonText: 'Close'
+		})
+}
+
+// KEYBOARD INPUT
+
+var keyWasPressedLastFrame = true;
 
 function checkKeys()
 {
@@ -210,16 +87,16 @@ function keyPressed()
 	switch (key)
 	{
 		case ('l') :
-			geneticSystem.likeSpiro()
+			geneticAlgorithm.likePattern()
 			break;
 		case ('d') :
-			geneticSystem.gotoNextChild()
+			geneticAlgorithm.gotoNextChild()
 			break;
 		case ('s') :
 			saveCanvas("Stained glass pattern")
 			break;
 		case ('h') :
-			// help pop-up
+			helpPopup();
 			break;
 	}
 	

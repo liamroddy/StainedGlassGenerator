@@ -96,7 +96,11 @@ footer {
 #like {
     color: #8bc600;
 }
-#like:focus, #like:active, #like:hover {
+#like:focus, #like:hover {
+    color: white;
+    background-color: #c2f056;
+}
+#like:active {
     color: white;
     background-color: #8bc600;
 }
@@ -104,23 +108,35 @@ footer {
 #dislike {
     color: #d3455b;
 }
-#dislike:focus, #dislike:active, #dislike:hover {
+#dislike:focus, #dislike:hover {
     color: white;
-    background-color: #d3455b;
+    background-color: #de98a3; 
+}
+#dislike:active {
+    color: white;
+    background-color: #d3455b; 
 }
 
 #download {
     color: #7b8a9b;
 }
-#download:focus, #download:active, #download:hover {
+#download:focus, #download:hover {
     color: white;
-    background-color: #7b8a9b;
+    background-color: #b2bac2;  
+}
+#download:active {
+    color: white;
+    background-color: #7b8a9b; 
 }
 
 #help {
     color: #7b8a9b;
 }
-#help:focus, #help:active,#help:hover {
+#help:focus, #help:hover {
     color: white;
-    background-color: #7b8a9b;
+    background-color: #b2bac2;
+}
+#help:active {
+    color: white;
+    background-color: #7b8a9b; 
 }

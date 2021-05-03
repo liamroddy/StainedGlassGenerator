@@ -2,69 +2,31 @@
     <html lang="en">
 
     <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stained Glass Generator</title>
-
-	<link rel="stylesheet" href="resources/css/style.css"/>
-
-	<!-- TODO: do we need all three? -->
-	<link rel="icon" type="image/png" sizes="32x32" href="resources/favicons/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="resources/favicons/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="resources/favicons/favicon-16x16.png">
-
-    <script src="resources/js/p5.min.js"></script> <!-- <script src="../p5.min.js"></script> -->
-	<script type="module" src="resources/js/sketch.js"></script>
-	<!-- <script src="https://kit.fontawesome.com/42465ee0f4.js" crossorigin="anonymous"></script> -->
-	<script src="resources/js/fontawesome/js/all.min.js"></script>
-	<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
-	<script>
-		window.onload = function() {
-			Swal.fire({
-			title: 'Stained Glass Generator',
-			html:
-				'<p>An interactive art piece.' +
-				'<br>Generates patterns inspired by the beautiful stained glass rose window of <strong>Galway Cathedral</strong>' +
-				'<br><br>Click <span class=\'fa fa-heart\'></span> if you like a pattern<br>Click <span class=\'fa fa-ban\'></span> if you don\'t' +
-				'<br>The generator will learn your preferences and generate you more patterns that you might like' +
-				'<br><br>Click the <span class=\'fa fa-arrow-to-bottom\'></span> to download a pattern.</p>' +
-				'<br> Click the  <span class=\'fa fa-question-circle\'></span> for help.' +
-				'' +
-				'',
-			confirmButtonText: 'Close'
-			})
-		};
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
-		let helpPopup = function()
-		{
-			Swal.fire({
-			title: 'Stained Glass Generator',
-			html:
-				'<p>An interactive art piece.' +
-				'<br>Generates patterns inspired by the beautiful stained glass rose window of <strong>Galway Cathedral</strong>' +
-				'<br><br>Click <span class=\'fa fa-heart\'></span> if you like a pattern<br>Click <span class=\'fa fa-ban\'></span> if you don\'t' +
-				'<br>The generator will learn your preferences and generate you more patterns that you might like' +
-				'<br><br>Click the <span class=\'fa fa-arrow-to-bottom\'></span> to download a pattern.</p>' +
-				'<br> Click the  <span class=\'fa fa-question-circle\'></span> for help.' +
-				'' +
-				'',
-			confirmButtonText: 'Close'
-			})
-		}
-	</script>
+		<title>Stained Glass Generator</title>
 
+		<link rel="stylesheet" href="resources/css/style.css"/>
+
+		<link rel="icon" type="image/png" sizes="16x16" href="resources/favicons/favicon-16x16.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="resources/favicons/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="resources/favicons/favicon-96x96.png">
+
+		<script src="resources/js/p5.min.js"></script>
+		<script type="module" src="resources/js/sketch.js"></script>
+		<script src="resources/js/fontawesome/js/all.min.js"></script>
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	</head>
 
     <body>
-	
 		<!-- Where the P5js canavas will be rendered -->
 		<main aria-label="Stained glass pattern">
         </main>
 
 		<footer>
 			<div class="big_button_container">
-				<button aria-label="Help" name="Help" id="help" onclick="helpPopup()"><i class="fal fa-question-circle"></i></button>
+				<button aria-label="Help" name="Help" id="help"><i class="fal fa-question-circle"></i></button>
 				
 				<button aria-label="Dislike pattern" name="Dislike pattern" id="dislike"><i class="fal fa-ban"></i></button>
 				<button aria-label="Like pattern" name="Like pattern" id="like"><i class="fal fa-heart"></i></button>
