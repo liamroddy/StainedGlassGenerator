@@ -139,7 +139,7 @@ footer {
 #like {
     color: #8bc600;
 }
-#like:focus, #like:hover {
+#like:hover {
     color: white;
     background-color: #c2f056;
 }
@@ -151,7 +151,7 @@ footer {
 #dislike {
     color: #d3455b;
 }
-#dislike:focus, #dislike:hover {
+#dislike:hover {
     color: white;
     background-color: #de98a3; 
 }
@@ -163,7 +163,7 @@ footer {
 #download {
     color: #7b8a9b;
 }
-#download:focus, #download:hover {
+#download:hover {
     color: white;
     background-color: #b2bac2;  
 }
@@ -175,7 +175,7 @@ footer {
 #help {
     color: #7b8a9b;
 }
-#help:focus, #help:hover {
+#help:hover {
     color: white;
     background-color: #b2bac2;
 }
