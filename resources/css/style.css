@@ -29,17 +29,39 @@ h1 {
 
 /* Scale up the drawing for mobile screens, allow it to spill offscreen */
 @media only screen 
-  and (max-device-width: 812px) 
   and (orientation: portrait) { 
+    
+    
     .p5Canvas {
-        position: absolute;
         overflow: hidden;
         max-width: 150vw;
         max-height: 150vw;
         min-width: 150vw;
         min-height: 150vw;
+        margin-left: -25vw;
+        left: -150vw;
+        top: -75vw; /*calc(50vh - 75vw);*/
+    }
+
+    main {
+        overflow: hidden;
+        max-width: 100vw;
+        max-height: 150vw;
+        min-width: 100vw;
+        min-height: 150vw;
         left: -75vw;
         top: -75vw; /*calc(50vh - 75vw);*/
+        position: absolute;
+    }
+
+    body {
+        overflow: hidden;
+        max-width: 100vw;
+        max-height: 100vh;
+        min-width: 100vw;
+        min-height: 100vh;
+        width: 100vw;
+        height: 100vh;
     }
     /*
     body {
