@@ -44,13 +44,11 @@ function helpPopup()
 		title: 'Stained Glass Generator',
 		html:
 			'<p>An interactive art piece.' +
-			'<br>Generates patterns inspired by the beautiful stained glass rose window of <strong>Galway Cathedral</strong>' +
+			'<br>Generates patterns inspired by the beautiful stained glass rose windows of <strong>Galway Cathedral</strong>' +
 			'<br><br>Click <span class=\'fa fa-heart\'></span> if you like a pattern<br>Click <span class=\'fa fa-ban\'></span> if you don\'t' +
 			'<br>The generator will learn your preferences and generate you more patterns that you might like' +
 			'<br><br>Click the <span class=\'fa fa-arrow-to-bottom\'></span> to download a pattern.</p>' +
-			'<br> Click the  <span class=\'fa fa-question-circle\'></span> for help.' +
-			'' +
-			'',
+			'<br> Click the  <span class=\'fa fa-question-circle\'></span> for help.',
 		confirmButtonText: 'Close'
 		})
 }
