@@ -13,7 +13,7 @@ function setupCanvas(w, h)
 export class GeneticAlgorithm
 {	
 	constructor()
-    {
+	{
 		setupCanvas(w, h);		
 
 		this.likedList = new Array()
@@ -25,7 +25,7 @@ export class GeneticAlgorithm
 		{
 			this.generationList[i] = new SpiroGraph();
 		}
-    }
+	}
 
 	updatePattern()
 	{		
@@ -73,7 +73,7 @@ export class GeneticAlgorithm
 		parentList =  this.likedList.concat(randomParentList)
 
 		// generate children
-		childList = this.createNewGeneration(parentList)
+		childList = this.crossoverPatterns(parentList)
 
 		return childList
 	}
@@ -89,7 +89,7 @@ export class GeneticAlgorithm
 	}
 
 
-	createNewGeneration(parentList) {
+	crossoverPatterns(parentList) {
 		let childList = new Array()
 			
 		for (let n=0; n < this.N; n++)
